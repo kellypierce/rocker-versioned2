@@ -1,0 +1,10 @@
+FROM rocker/shiny-verse:4.1.0
+
+LABEL org.opencontainers.image.licenses="GPL-2.0-or-later" \
+      org.opencontainers.image.source="https://github.com/kellypierce/rocker-versioned2" \
+      org.opencontainers.image.vendor="Texas Advanced Computing Center, based on Rocker Project" \
+      org.opencontainers.image.authors="Kelly Pierce <kpierce@tacc.utexas.edu>"
+
+
+
+RUN /rocker_scripts/install_rstanarm.sh
