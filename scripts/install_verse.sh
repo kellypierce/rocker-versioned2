@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+## build ARGs
+NCPUS=${NCPUS:--1}
+
 # always set this for scripts but don't declare as ENV..
 export DEBIAN_FRONTEND=noninteractive
 export PATH=$PATH:/usr/local/texlive/bin/x86_64-linux/
@@ -49,7 +52,7 @@ fi
 # So: we can build the redland package bindings and then swap back to libcurl-openssl-dev... (ick)
 # explicitly install runtime library sub-deps of librdf0-dev so they are not auto-removed.
 apt-get install -y librdf0-dev
-install2.r --error --skipinstalled redland
+install2.r --error --skipinstalled -n $NCPUS redland
 apt-get install -y \
 	libcurl4-openssl-dev \
 	libxslt-dev \
@@ -70,9 +73,15 @@ wget "https://travis-bin.yihui.name/texlive-local.deb" \
 ## Install texlive
 /rocker_scripts/install_texlive.sh
 
-install2.r --error --skipinstalled tinytex
-install2.r --error --deps TRUE --skipinstalled \
-    blogdown bookdown rticles rmdshower rJava xaringan
+install2.r --error --skipinstalled -n $NCPUS tinytex
+install2.r --error --deps TRUE --skipinstalled -n $NCPUS \
+    blogdown \
+    bookdown \
+    distill \
+    rticles \
+    rmdshower \
+    rJava \
+    xaringan
 
 rm -rf /tmp/downloaded_packages
 rm -rf /var/lib/apt/lists/*
